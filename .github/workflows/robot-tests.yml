@@ -25,9 +25,9 @@ jobs:
     
     - name: Set environment variables
       run: |
-        echo "ENV_BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
-        echo "ENV_USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
-        echo "ENV_PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
+        echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
+        echo "USERNAME=${{ secrets.USERNAME }}" >> $GITHUB_ENV
+        echo "PASSWORD=${{ secrets.PASSWORD }}" >> $GITHUB_ENV
 
     
     - name: Run Robot Framework tests
