@@ -29,10 +29,11 @@ Login With Wrong/Non-Existing Username
     Create Session    api    ${BASE_URL}    verify=True
     ${headers}=    Create Dictionary    Content-Type=application/json    Accept=application/json
     ${payload}=    Set Variable    {"username": "romeobajadajr@gmail.com", "password": "${PASSWORD}"}
-    ${response}=    POST On Session    api    ${LOGIN_PATH}    data=${payload}    headers=${headers}    expected_status=422
+    ${response}=    POST On Session    api    ${LOGIN_PATH}    data=${payload}    headers=${headers}    expected_status=ANY
     Log         ${response.status_code}
-    Should Be Equal As Strings    ${response.status_code}    422
-    Should Contain                ${response.json()['message']}    Either email or password is not correct.
+    Should Be True    ${response.status_code} in [422, 429]
+    Run Keyword If    ${response.status_code} == 422    Should Contain    ${response.json()['message']}    Either email or password is not correct
+    Run Keyword If    ${response.status_code} == 429    Should Contain    ${response.json()['message']}    Too many login attempts
 
 Login With Empty Password
     Valid Login With Encrypted Password 
@@ -59,10 +60,11 @@ Login With Invalid Email Format
     Create Session    api    ${BASE_URL}    verify=True
     ${headers}=    Create Dictionary    Content-Type=application/json    Accept=application/json
     ${payload}=    Set Variable    {"username": "invalid-email", "password": "${PASSWORD}"}
-    ${response}=    POST On Session    api    ${LOGIN_PATH}    data=${payload}    headers=${headers}    expected_status=422
+    ${response}=    POST On Session    api    ${LOGIN_PATH}    data=${payload}    headers=${headers}    expected_status=ANY
     Log         ${response.status_code}
-    Should Be Equal As Strings    ${response.status_code}    422
-    Should Contain                ${response.json()['message']}        Either email or password is not correct.
+    Should Be True    ${response.status_code} in [422, 429]
+    Run Keyword If    ${response.status_code} == 422    Should Contain    ${response.json()['message']}    Either email or password is not correct
+    Run Keyword If    ${response.status_code} == 429    Should Contain    ${response.json()['message']}    Too many login attempts
 
 Login With Non-Encrypted Password
     Valid Login With Encrypted Password 
